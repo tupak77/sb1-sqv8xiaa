@@ -26,27 +26,51 @@ export function useGoals() {
 
   const handleAddGoal = async (title: string, priority: PriorityLevel) => {
     try {
+      // Create temporary ID for optimistic update
+      const tempId = crypto.randomUUID();
+      const tempGoal = { id: tempId, title, priority, completed: false };
+      
+      // Optimistic update
+      setGoals(prevGoals => [...prevGoals, tempGoal]);
+
       await addGoal(title, priority);
+      // Fetch to get the real ID and any server-side changes
       await fetchGoals();
     } catch (err) {
+      // Revert on error
+      await fetchGoals();
       setError(err instanceof Error ? err : new Error('Failed to add goal'));
     }
   };
 
   const handleUpdateGoal = async (id: string, updates: Partial<Goal>) => {
     try {
+      // Optimistic update
+      setGoals(prevGoals =>
+        prevGoals.map(goal =>
+          goal.id === id
+            ? { ...goal, ...updates }
+            : goal
+        )
+      );
+
       await updateGoal(id, updates);
-      await fetchGoals();
     } catch (err) {
+      // Revert on error
+      await fetchGoals();
       setError(err instanceof Error ? err : new Error('Failed to update goal'));
     }
   };
 
   const handleDeleteGoal = async (id: string) => {
     try {
+      // Optimistic update
+      setGoals(prevGoals => prevGoals.filter(goal => goal.id !== id));
+
       await deleteGoal(id);
-      await fetchGoals();
     } catch (err) {
+      // Revert on error
+      await fetchGoals();
       setError(err instanceof Error ? err : new Error('Failed to delete goal'));
     }
   };

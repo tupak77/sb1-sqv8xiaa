@@ -4,6 +4,7 @@ import { AddSubscriptionForm } from '../components/AddSubscriptionForm';
 import { SubscriptionCard } from '../components/SubscriptionCard';
 import { useSubscriptions } from '../hooks/useSubscriptions';
 import { LoadingSpinner } from '../components/LoadingSpinner';
+import { DashboardLayout } from '../components/DashboardLayout';
 import { ErrorMessage } from '../components/ErrorMessage';
 import type { Subscription } from '../types';
 
@@ -25,8 +26,7 @@ export function SubscriptionsPage() {
   const totalYearly = totalMonthly * 12;
 
   return (
-    <div className="min-h-screen py-12 px-6 text-white">
-      <div className="max-w-screen-xl mx-auto">
+    <DashboardLayout>
         <header className="text-center mb-12">
           <div className="flex items-center justify-center gap-4 mb-4">
             <Receipt size={40} className="text-blue-400" />
@@ -90,7 +90,6 @@ export function SubscriptionsPage() {
         </div>
           </>
         )}
-      </div>
-    </div>
+    </DashboardLayout>
   );
 }

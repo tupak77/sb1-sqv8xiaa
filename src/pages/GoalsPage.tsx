@@ -4,6 +4,7 @@ import { AddGoalForm } from '../components/AddGoalForm';
 import { GoalCard } from '../components/GoalCard';
 import { useGoals } from '../hooks/useGoals';
 import { LoadingSpinner } from '../components/LoadingSpinner';
+import { DashboardLayout } from '../components/DashboardLayout';
 import { ErrorMessage } from '../components/ErrorMessage';
 import type { Goal, PriorityLevel } from '../types';
 
@@ -19,8 +20,7 @@ export function GoalsPage() {
   } = useGoals();
 
   return (
-    <div className="min-h-screen py-12 px-6 text-white">
-      <div className="max-w-screen-xl mx-auto">
+    <DashboardLayout>
         <header className="text-center mb-12">
           <div className="flex items-center justify-center gap-4 mb-4">
             <Target size={40} className="text-blue-400" />
@@ -54,7 +54,6 @@ export function GoalsPage() {
             </div>
           </>
         )}
-      </div>
-    </div>
+    </DashboardLayout>
   );
 }

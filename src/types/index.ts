@@ -33,3 +33,22 @@ export interface Subscription {
   category: SubscriptionCategory;
   active: boolean;
 }
+
+export type HabitFrequency = 'daily' | 'weekly';
+
+export interface Habit {
+  id: string;
+  title: string;
+  description?: string;
+  frequency: HabitFrequency;
+  startDate: string;
+  completedDates: string[];
+  active: boolean;
+  category: string;
+  notes: DailyNote[];
+}
+
+export interface DailyNote {
+  date: string;
+  content: string;
+}

@@ -26,27 +26,52 @@ export function useSubscriptions() {
 
   const handleAddSubscription = async (subscription: Omit<Subscription, 'id'>) => {
     try {
+      // Create temporary ID for optimistic update
+      const tempId = crypto.randomUUID();
+      const tempSubscription = { ...subscription, id: tempId };
+      
+      // Optimistic update
+      setSubscriptions(prevSubscriptions => [...prevSubscriptions, tempSubscription]);
+
       await addSubscription(subscription);
+      // Fetch to get the real ID and any server-side changes
       await fetchSubscriptions();
     } catch (err) {
+      // Revert on error
+      await fetchSubscriptions();
       setError(err instanceof Error ? err : new Error('Failed to add subscription'));
     }
   };
 
   const handleUpdateSubscription = async (id: string, updates: Partial<Subscription>) => {
     try {
+      // Optimistic update
+      setSubscriptions(prevSubscriptions =>
+        prevSubscriptions.map(subscription =>
+          subscription.id === id
+            ? { ...subscription, ...updates }
+            : subscription
+        )
+      );
+
       await updateSubscription(id, updates);
-      await fetchSubscriptions();
     } catch (err) {
+      // Revert on error
+      await fetchSubscriptions();
       setError(err instanceof Error ? err : new Error('Failed to update subscription'));
     }
   };
 
   const handleDeleteSubscription = async (id: string) => {
     try {
+      // Optimistic update
+      setSubscriptions(prevSubscriptions => 
+        prevSubscriptions.filter(subscription => subscription.id !== id));
+
       await deleteSubscription(id);
-      await fetchSubscriptions();
     } catch (err) {
+      // Revert on error
+      await fetchSubscriptions();
       setError(err instanceof Error ? err : new Error('Failed to delete subscription'));
     }
   };
