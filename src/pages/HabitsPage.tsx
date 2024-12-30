@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Target, Trophy, Calendar, ArrowRight } from 'lucide-react';
 import { AddHabitForm } from '../components/AddHabitForm';
 import { HabitCard } from '../components/HabitCard';
 import { HabitStats } from '../components/HabitStats';
 import { HabitCalendar } from '../components/HabitCalendar';
 import { WeeklyReview } from '../components/WeeklyReview';
-import { HabitHistoryEditor } from '../components/HabitHistoryEditor';
+import { HabitSlidingPanel } from '../components/HabitSlidingPanel';
 import { useHabits } from '../hooks/useHabits';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { ErrorMessage } from '../components/ErrorMessage';
+import type { Habit } from '../types';
 import { ChallengeDates } from '../components/ChallengeDates';
 
 export function HabitsPage() {
+  const [selectedHabit, setSelectedHabit] = useState<Habit | null>(null);
+
   const {
     habits,
     loading,
@@ -58,6 +61,18 @@ export function HabitsPage() {
     handleUpdateHabit(id, {
       completedDates: Array.from(completedDates)
     });
+    
+    // Update the selected habit if it's the one being modified
+    if (selectedHabit?.id === id) {
+      setSelectedHabit(prev => prev ? {
+        ...prev,
+        completedDates: Array.from(completedDates)
+      } : null);
+    }
+  };
+
+  const handleHabitClick = (habit: Habit) => {
+    setSelectedHabit(habit);
   };
 
   return (
@@ -90,6 +105,7 @@ export function HabitsPage() {
                   key={habit.id}
                   habit={habit}
                   onToggle={handleToggleHabit}
+                  onClick={() => handleHabitClick(habit)}
                   onUpdateNotes={handleUpdateNotes}
                   onDelete={handleDeleteHabit}
                 />
@@ -107,18 +123,16 @@ export function HabitsPage() {
             <WeeklyReview habits={habits} />
             <div className="h-8"></div>
             
-            {habits.map(habit => (
-              <div key={habit.id} className="mb-8">
-                <HabitHistoryEditor
-                  habit={habit}
-                  onToggle={handleToggleHabit}
-                  onUpdateNotes={handleUpdateNotes}
-                />
-              </div>
-            ))}
-            
             <div className="h-8"></div>
             <HabitStats habits={habits} />
+            
+            <HabitSlidingPanel
+              habit={selectedHabit}
+              isOpen={selectedHabit !== null}
+              onClose={() => setSelectedHabit(null)}
+              onToggleDate={handleToggleHabit}
+              onUpdateNotes={handleUpdateNotes}
+            />
           </>
         )}
     </DashboardLayout>

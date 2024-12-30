@@ -10,10 +10,11 @@ interface HabitCardProps {
   habit: Habit;
   onToggle: (id: string, date: string) => void;
   onUpdateNotes: (id: string, date: string, note: string) => void;
+  onClick: () => void;
   onDelete: (id: string) => void;
 }
 
-export function HabitCard({ habit, onToggle, onUpdateNotes, onDelete }: HabitCardProps) {
+export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }: HabitCardProps) {
   const today = new Date();
   const todayStr = toUTCDateString(today);
   const isCompletedToday = habit.completedDates.includes(todayStr);
@@ -51,7 +52,9 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onDelete }: HabitCar
 
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 
-                    hover:border-blue-500/30 transition-all duration-300 card-shadow">
+                    hover:border-blue-500/30 transition-all duration-300 card-shadow
+                    cursor-pointer"
+         onClick={onClick}>
       <div className="flex items-start justify-between gap-4">
         <div className="flex-grow">
           <div className="flex items-center gap-3">
