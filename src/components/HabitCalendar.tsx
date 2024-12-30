@@ -14,10 +14,13 @@ export function HabitCalendar({ habits }: HabitCalendarProps) {
   };
 
   const getFirstDayOfMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+    const day = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+    return day === 0 ? 6 : day - 1; // Convert to Monday-based (0 = Monday, 6 = Sunday)
   };
 
   const getDayStatus = (date: string) => {
+    // Ensure we're comparing dates in UTC
+    const utcDate = new Date(date + 'T00:00:00Z').toISOString().split('T')[0];
     const habitOrder = [
       'Rezar',
       'No FAP',
@@ -37,7 +40,7 @@ export function HabitCalendar({ habits }: HabitCalendarProps) {
     });
 
     return orderedHabits.map(habit => 
-      habit.completedDates.includes(date) ? '✓' : '·'
+      habit.completedDates.includes(utcDate) ? '✓' : '·'
     );
   };
 
@@ -79,7 +82,7 @@ export function HabitCalendar({ habits }: HabitCalendarProps) {
 
     // Add cells for each day of the month
     for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
+      const date = new Date(Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), day))
         .toISOString().split('T')[0];
       const status = getDayStatus(date);
       const completedCount = status.filter(s => s === '✓').length;
@@ -156,7 +159,7 @@ export function HabitCalendar({ habits }: HabitCalendarProps) {
         </div>
 
         <div className="grid grid-cols-7 gap-2 mb-2">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
             <div key={day} className="text-center text-sm text-gray-400">
               {day}
             </div>

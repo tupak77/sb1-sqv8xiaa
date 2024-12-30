@@ -5,6 +5,7 @@ import { HabitCard } from '../components/HabitCard';
 import { HabitStats } from '../components/HabitStats';
 import { HabitCalendar } from '../components/HabitCalendar';
 import { WeeklyReview } from '../components/WeeklyReview';
+import { HabitHistoryEditor } from '../components/HabitHistoryEditor';
 import { useHabits } from '../hooks/useHabits';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { DashboardLayout } from '../components/DashboardLayout';
@@ -104,6 +105,18 @@ export function HabitsPage() {
             <div className="h-8"></div>
             
             <WeeklyReview habits={habits} />
+            <div className="h-8"></div>
+            
+            {habits.map(habit => (
+              <div key={habit.id} className="mb-8">
+                <HabitHistoryEditor
+                  habit={habit}
+                  onToggle={handleToggleHabit}
+                  onUpdateNotes={handleUpdateNotes}
+                />
+              </div>
+            ))}
+            
             <div className="h-8"></div>
             <HabitStats habits={habits} />
           </>

@@ -4,6 +4,8 @@ import { HabitCompletionAnimation } from './HabitCompletionAnimation';
 import { DailyNoteForm } from './DailyNoteForm';
 import type { Habit } from '../types';
 
+import { toUTCDateString } from '../utils/dates';
+
 interface HabitCardProps {
   habit: Habit;
   onToggle: (id: string, date: string) => void;
@@ -12,8 +14,9 @@ interface HabitCardProps {
 }
 
 export function HabitCard({ habit, onToggle, onUpdateNotes, onDelete }: HabitCardProps) {
-  const today = new Date().toISOString().split('T')[0];
-  const isCompletedToday = habit.completedDates.includes(today);
+  const today = new Date();
+  const todayStr = toUTCDateString(today);
+  const isCompletedToday = habit.completedDates.includes(todayStr);
   const [showAnimation, setShowAnimation] = useState<'confetti' | 'checkmark' | null>(null);
   const [showNoteForm, setShowNoteForm] = useState(false);
 
@@ -21,16 +24,16 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onDelete }: HabitCar
     if (!isCompletedToday) {
       setShowAnimation(Math.random() > 0.5 ? 'confetti' : 'checkmark');
     }
-    onToggle(habit.id, today);
+    onToggle(habit.id, todayStr);
   };
   
   const calculateStreak = () => {
     let streak = 0;
     const sortedDates = [...habit.completedDates].sort();
-    const lastDate = new Date(sortedDates[sortedDates.length - 1]);
+    const lastDate = new Date(sortedDates[sortedDates.length - 1] + 'T00:00:00Z');
     
     for (let i = sortedDates.length - 1; i >= 0; i--) {
-      const currentDate = new Date(sortedDates[i]);
+      const currentDate = new Date(sortedDates[i] + 'T00:00:00Z');
       const expectedDate = new Date(lastDate);
       expectedDate.setDate(lastDate.getDate() - (sortedDates.length - 1 - i));
       
@@ -43,7 +46,7 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onDelete }: HabitCar
     return streak;
   };
 
-  const todayNote = habit.notes?.find(note => note.date === today);
+  const todayNote = habit.notes?.find(note => note.date === todayStr);
   const streak = calculateStreak();
 
   return (
@@ -113,10 +116,10 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onDelete }: HabitCar
       {showNoteForm && (
         <div className="mt-4">
           <DailyNoteForm
-            date={today}
+            date={todayStr}
             currentNote={todayNote?.content}
             onSave={(note) => {
-              onUpdateNotes(habit.id, today, note);
+              onUpdateNotes(habit.id, todayStr, note);
               setShowNoteForm(false);
             }}
           />
