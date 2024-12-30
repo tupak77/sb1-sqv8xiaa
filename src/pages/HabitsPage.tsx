@@ -113,10 +113,6 @@ export function HabitsPage() {
             </div>
             <div className="h-8"></div>
             
-            {habits.length > 0 && habits[0].notes?.length > 0 && (
-              <NotesHistory notes={habits[0].notes} />
-            )}
-            
             <HabitCalendar habits={habits} />
             <div className="h-8"></div>
             

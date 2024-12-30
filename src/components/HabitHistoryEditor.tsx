@@ -25,7 +25,9 @@ export function HabitHistoryEditor({ habit, onToggle, onUpdateNotes }: HabitHist
   };
 
   const formatDateString = (year: number, month: number, day: number) => {
-    return createUTCDate(year, month, day);
+    const monthStr = String(month + 1).padStart(2, '0');
+    const dayStr = String(day).padStart(2, '0');
+    return `${year}-${monthStr}-${dayStr}`;
   };
 
   const handleDateClick = (dateStr: string) => {

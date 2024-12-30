@@ -193,12 +193,12 @@ export function WeeklyReview({ habits }: WeeklyReviewProps) {
             <div>
               <h4 className="text-green-400 font-medium mb-2">Top Performers</h4>
               <ul className="space-y-2">
-                {topPerformers.map(habit => (
+                {topPerformers.map((habit, index) => (
                   <li key={habit.title} className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-400" />
                     <span className="text-gray-300">{habit.title}</span>
                     <span className="text-gray-400 text-sm ml-auto">
-                      {habit.percentage.toFixed(1)}%
+                      {habit.completedDays} days
                     </span>
                   </li>
                 ))}
@@ -208,12 +208,12 @@ export function WeeklyReview({ habits }: WeeklyReviewProps) {
             <div>
               <h4 className="text-yellow-400 font-medium mb-2">Areas for Improvement</h4>
               <ul className="space-y-2">
-                {needsImprovement.map(habit => (
+                {needsImprovement.map((habit, index) => (
                   <li key={habit.title} className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-yellow-400" />
                     <span className="text-gray-300">{habit.title}</span>
                     <span className="text-gray-400 text-sm ml-auto">
-                      {habit.percentage.toFixed(1)}%
+                      {habit.completedDays} days
                     </span>
                   </li>
                 ))}

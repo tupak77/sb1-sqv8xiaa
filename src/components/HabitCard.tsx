@@ -27,6 +27,11 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
     }
     onToggle(habit.id, todayStr);
   };
+
+  const handleToggleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleToggle();
+  };
   
   const calculateStreak = () => {
     let streak = 0;
@@ -59,7 +64,7 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
         <div className="flex-grow">
           <div className="flex items-center gap-3">
             <button
-              onClick={handleToggle}
+              onClick={handleToggleClick}
               className={`transition-transform duration-300 ${
                 isCompletedToday ? 'scale-110' : 'hover:scale-105'
               }`}
@@ -90,7 +95,10 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
               </span>
             </div>
             <button
-              onClick={() => setShowNoteForm(!showNoteForm)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowNoteForm(!showNoteForm);
+              }}
               className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors ml-auto"
             >
               <PenLine size={18} />
@@ -102,7 +110,10 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
         </div>
 
         <button
-          onClick={() => onDelete(habit.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(habit.id);
+          }}
           className="p-2 text-red-400 hover:text-red-300 transition-colors"
         >
           <Trash2 size={20} />

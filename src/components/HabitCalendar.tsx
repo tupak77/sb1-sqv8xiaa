@@ -44,20 +44,6 @@ export function HabitCalendar({ habits }: HabitCalendarProps) {
     );
   };
 
-  const getActivityHeatmap = () => {
-    const activityByHour = new Array(24).fill(0);
-    
-    habits.forEach(habit => {
-      habit.completedDates.forEach(date => {
-        const hour = new Date(date).getHours();
-        activityByHour[hour]++;
-      });
-    });
-
-    const maxActivity = Math.max(...activityByHour);
-    return activityByHour.map(count => count / (maxActivity || 1));
-  };
-
   const navigateMonth = (direction: 'prev' | 'next') => {
     setCurrentDate(prev => {
       const newDate = new Date(prev);
@@ -134,11 +120,8 @@ export function HabitCalendar({ habits }: HabitCalendarProps) {
     return days;
   };
 
-  const activityHeatmap = getActivityHeatmap();
-
   return (
     <div className="space-y-8">
-      {/* Calendar */}
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
         <div className="flex items-center justify-between mb-6">
           <button
@@ -168,66 +151,6 @@ export function HabitCalendar({ habits }: HabitCalendarProps) {
 
         <div className="grid grid-cols-7 gap-2">
           {renderCalendar()}
-        </div>
-      </div>
-
-      {/* Activity Heatmap */}
-      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-blue-500/20 rounded-lg">
-            <BarChart3 className="w-6 h-6 text-blue-400" />
-          </div>
-          <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r 
-                       from-blue-400 to-purple-400">
-            Daily Activity Pattern
-          </h3>
-        </div>
-        <div className="grid grid-cols-24 gap-1">
-          {activityHeatmap.map((intensity, hour) => (
-            <div key={hour} className="space-y-2 group">
-              <div
-                className="h-20 rounded-lg relative overflow-hidden transition-all duration-300 
-                         hover:scale-105 transform cursor-pointer group-hover:shadow-lg 
-                         group-hover:shadow-blue-500/20"
-                style={{
-                  backgroundColor: `rgba(59, 130, 246, ${intensity * 0.5})`,
-                  transition: 'background-color 0.3s ease'
-                }}
-              >
-                {intensity > 0 && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent 
-                               opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                )}
-                {intensity > 0.7 && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent 
-                               via-white/10 to-transparent animate-shimmer" />
-                )}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 
-                             group-hover:opacity-100 transition-opacity duration-300">
-                  <span className="text-xs font-medium text-white bg-black/50 px-2 py-1 rounded-full">
-                    {Math.round(intensity * 100)}%
-                  </span>
-                </div>
-              </div>
-              <div className="text-center text-xs text-gray-400">
-                {hour.toString().padStart(2, '0')}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 flex justify-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500/20" />
-            <span className="text-xs text-gray-400">Low Activity</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500/50" />
-            <span className="text-xs text-gray-400">Medium Activity</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500" />
-            <span className="text-xs text-gray-400">High Activity</span>
-          </div>
         </div>
       </div>
     </div>
