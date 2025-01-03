@@ -1,7 +1,7 @@
 import React from 'react';
 import { Target } from 'lucide-react';
 import { AddGoalForm } from '../components/AddGoalForm';
-import { GoalCard } from '../components/GoalCard';
+import { GoalDashboard } from '../components/GoalDashboard';
 import { useGoals } from '../hooks/useGoals';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { DashboardLayout } from '../components/DashboardLayout';
@@ -42,16 +42,10 @@ export function GoalsPage() {
           <>
             <AddGoalForm onAdd={handleAddGoal} />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {goals.map(goal => (
-                <GoalCard
-                  key={goal.id}
-                  goal={goal}
-                  onUpdate={handleUpdateGoal}
-                  onDelete={handleDeleteGoal}
-                />
-              ))}
-            </div>
+            <GoalDashboard
+              goals={goals}
+              onUpdateGoal={handleUpdateGoal}
+            />
           </>
         )}
     </DashboardLayout>

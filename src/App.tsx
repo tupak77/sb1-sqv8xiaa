@@ -5,7 +5,6 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { GoalsPage } from './pages/GoalsPage';
-import { SaasChallengePage } from './pages/SaasChallengePage';
 import { SubscriptionsPage } from './pages/SubscriptionsPage';
 import { HabitsPage } from './pages/HabitsPage';
 import { Dashboard } from './pages/Dashboard';
@@ -18,11 +17,6 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/saas-challenge" element={
-            <ProtectedRoute>
-              <SaasChallengePage />
-            </ProtectedRoute>
-          } />
           <Route path="/goals" element={
             <ProtectedRoute>
               <GoalsPage />
