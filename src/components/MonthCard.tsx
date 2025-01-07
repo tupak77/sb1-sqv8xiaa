@@ -77,7 +77,7 @@ export function MonthCard({ month, onUpdateMonth, onRemoveTrip }: MonthCardProps
                       (month.templateValue || 0) * (month.templateMultiplier || 25);
 
   return (
-    <div className="w-full h-[32rem] bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 flex flex-col snap-center card-shadow border border-gray-700/50 hover:border-blue-500/30 transition-all duration-300">
+    <div className="w-full h-auto min-h-[32rem] bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 sm:p-6 flex flex-col snap-center card-shadow border border-gray-700/50 hover:border-blue-500/30 transition-all duration-300">
       <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 mb-4">{month.name}</h3>
       
       <div className="space-y-4 flex-grow min-h-0">
@@ -87,17 +87,17 @@ export function MonthCard({ month, onUpdateMonth, onRemoveTrip }: MonthCardProps
         </div>
 
         <div className="space-y-4">
-          <div className="flex gap-4">
-            <div className="flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
               <div>
                 <label htmlFor={`club-${month.name}`} className="block text-sm text-gray-400 mb-1">Club</label>
-                <div className="flex gap-2 items-center">
+                <div className="flex flex-wrap items-center gap-2">
                   <NumberInput
                     id={`club-${month.name}`}
                     value={month.clubValue || ''}
                     onChange={handleClubValueChange}
                     min="0"
-                    className="w-24"
+                    className="w-20 sm:w-24"
                   />
                   <span className="text-gray-400">×</span>
                   <NumberInput
@@ -105,21 +105,21 @@ export function MonthCard({ month, onUpdateMonth, onRemoveTrip }: MonthCardProps
                     value={month.clubMultiplier ?? ''}
                     onChange={handleClubMultiplierChange}
                     min="1"
-                    className="w-20"
+                    className="w-16 sm:w-20"
                   />
                 </div>
               </div>
             </div>
-            <div className="flex-1">
+            <div>
               <div>
                 <label htmlFor={`template-${month.name}`} className="block text-sm text-gray-400 mb-1">Template</label>
-                <div className="flex gap-2 items-center">
+                <div className="flex flex-wrap items-center gap-2">
                   <NumberInput
                     id={`template-${month.name}`}
                     value={month.templateValue || ''}
                     onChange={handleTemplateValueChange}
                     min="0"
-                    className="w-24"
+                    className="w-20 sm:w-24"
                   />
                   <span className="text-gray-400">×</span>
                   <NumberInput
@@ -127,7 +127,7 @@ export function MonthCard({ month, onUpdateMonth, onRemoveTrip }: MonthCardProps
                     value={month.templateMultiplier ?? ''}
                     onChange={handleTemplateMultiplierChange}
                     min="1"
-                    className="w-20"
+                    className="w-16 sm:w-20"
                   />
                 </div>
               </div>
