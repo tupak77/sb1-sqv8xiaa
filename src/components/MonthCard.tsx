@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Plane, Euro, Plus, X } from 'lucide-react';
 import { PlaneAnimation } from './PlaneAnimation';
 import { NumberInput } from './NumberInput';
-import { useClickAnimation } from '../hooks/useClickAnimation';
 import type { MonthData, Trip } from '../types';
+import { useClickAnimation } from '../hooks/useClickAnimation';
 
 interface MonthCardProps {
   month: MonthData;
@@ -16,7 +16,6 @@ export function MonthCard({ month, onUpdateMonth, onRemoveTrip }: MonthCardProps
   const [showAddTrip, setShowAddTrip] = useState(false);
   const { handleClick, animationClass } = useClickAnimation();
   const BASE_BUDGET = 2250;
-  const MULTIPLIER = 25;
 
   const handleAddTripClick = () => {
     setShowAddTrip(true);
@@ -29,6 +28,7 @@ export function MonthCard({ month, onUpdateMonth, onRemoveTrip }: MonthCardProps
     onUpdateMonth(month.name, { 
       clubValue: value,
       templateValue: templateValue,
+      clubMultiplier: month.clubMultiplier || 25,
       additionalValue: additionalValue
     });
   };
@@ -40,8 +40,19 @@ export function MonthCard({ month, onUpdateMonth, onRemoveTrip }: MonthCardProps
     onUpdateMonth(month.name, { 
       clubValue: clubValue,
       templateValue: value,
+      templateMultiplier: month.templateMultiplier || 25,
       additionalValue: additionalValue
     });
+  };
+
+  const handleClubMultiplierChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value === '' ? '' : parseInt(e.target.value) || 25;
+    onUpdateMonth(month.name, { clubMultiplier: value });
+  };
+
+  const handleTemplateMultiplierChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value === '' ? '' : parseInt(e.target.value) || 25;
+    onUpdateMonth(month.name, { templateMultiplier: value });
   };
 
   const handleAddTrip = (e: React.FormEvent) => {
@@ -62,7 +73,8 @@ export function MonthCard({ month, onUpdateMonth, onRemoveTrip }: MonthCardProps
     setShowAddTrip(false);
   };
 
-  const totalBudget = BASE_BUDGET + ((month.clubValue || 0) + (month.templateValue || 0)) * MULTIPLIER;
+  const totalBudget = BASE_BUDGET + (month.clubValue || 0) * (month.clubMultiplier || 25) + 
+                      (month.templateValue || 0) * (month.templateMultiplier || 25);
 
   return (
     <div className="w-full h-[32rem] bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 flex flex-col snap-center card-shadow border border-gray-700/50 hover:border-blue-500/30 transition-all duration-300">
@@ -77,24 +89,48 @@ export function MonthCard({ month, onUpdateMonth, onRemoveTrip }: MonthCardProps
         <div className="space-y-4">
           <div className="flex gap-4">
             <div className="flex-1">
-              <label htmlFor={`club-${month.name}`} className="block text-sm text-gray-400 mb-1">Club</label>
-              <NumberInput
-                id={`club-${month.name}`}
-                value={month.clubValue || ''}
-                onChange={handleClubValueChange}
-                min="0"
-                className="w-24"
-              />
+              <div>
+                <label htmlFor={`club-${month.name}`} className="block text-sm text-gray-400 mb-1">Club</label>
+                <div className="flex gap-2 items-center">
+                  <NumberInput
+                    id={`club-${month.name}`}
+                    value={month.clubValue || ''}
+                    onChange={handleClubValueChange}
+                    min="0"
+                    className="w-24"
+                  />
+                  <span className="text-gray-400">×</span>
+                  <NumberInput
+                    id={`club-multiplier-${month.name}`}
+                    value={month.clubMultiplier ?? ''}
+                    onChange={handleClubMultiplierChange}
+                    min="1"
+                    className="w-20"
+                  />
+                </div>
+              </div>
             </div>
             <div className="flex-1">
-              <label htmlFor={`template-${month.name}`} className="block text-sm text-gray-400 mb-1">Template</label>
-              <NumberInput
-                id={`template-${month.name}`}
-                value={month.templateValue || ''}
-                onChange={handleTemplateValueChange}
-                min="0"
-                className="w-24"
-              />
+              <div>
+                <label htmlFor={`template-${month.name}`} className="block text-sm text-gray-400 mb-1">Template</label>
+                <div className="flex gap-2 items-center">
+                  <NumberInput
+                    id={`template-${month.name}`}
+                    value={month.templateValue || ''}
+                    onChange={handleTemplateValueChange}
+                    min="0"
+                    className="w-24"
+                  />
+                  <span className="text-gray-400">×</span>
+                  <NumberInput
+                    id={`template-multiplier-${month.name}`}
+                    value={month.templateMultiplier ?? ''}
+                    onChange={handleTemplateMultiplierChange}
+                    min="1"
+                    className="w-20"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -9,7 +9,9 @@ export interface MonthData {
   trips: Trip[];
   additionalValue: number;
   clubValue?: number;
+  clubMultiplier?: number;
   templateValue?: number;
+  templateMultiplier?: number;
 }
 
 export type MonthName = 'January' | 'February' | 'March' | 'April' | 'May' | 'June' | 
