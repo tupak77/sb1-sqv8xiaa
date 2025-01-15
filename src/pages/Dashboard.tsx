@@ -6,6 +6,7 @@ import { useMonthsData } from '../hooks/useMonthsData';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { sortMonths } from '../utils/months';
+import { Particles } from '../components/ui/particles';
 
 export function Dashboard() {
   const { months, loading, error, handleUpdateMonth, handleRemoveTrip, refresh } = useMonthsData();
@@ -19,7 +20,14 @@ export function Dashboard() {
         ) : loading ? (
           <LoadingSpinner />
         ) : (
-          <>
+          <div className="relative">
+            <Particles
+              className="absolute inset-0 -z-10"
+              quantity={100}
+              ease={80}
+              color="#3b82f6"
+              refresh={false}
+            />
             <header className="text-center mb-12">
               <h1 className="text-7xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 
                            bg-clip-text text-transparent mb-4 gradient-animate title-glow transition-all 
@@ -37,7 +45,7 @@ export function Dashboard() {
               onUpdateMonth={handleUpdateMonth}
               onRemoveTrip={handleRemoveTrip}
             />
-          </> 
+          </div>
         )}
     </DashboardLayout>
   );
