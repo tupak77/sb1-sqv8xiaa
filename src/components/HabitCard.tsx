@@ -36,12 +36,22 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
   const calculateStreak = () => {
     let streak = 0;
     const sortedDates = [...habit.completedDates].sort();
+    const today = new Date();
+    const startDate = new Date();
+    
+    // Filter dates to only include those after challenge start
+    const validDates = sortedDates.filter(date => 
+      new Date(date + 'T00:00:00Z') >= startDate
+    );
+    
+    if (validDates.length === 0) return 0;
+    
     const lastDate = new Date(sortedDates[sortedDates.length - 1] + 'T00:00:00Z');
     
-    for (let i = sortedDates.length - 1; i >= 0; i--) {
-      const currentDate = new Date(sortedDates[i] + 'T00:00:00Z');
+    for (let i = validDates.length - 1; i >= 0; i--) {
+      const currentDate = new Date(validDates[i] + 'T00:00:00Z');
       const expectedDate = new Date(lastDate);
-      expectedDate.setDate(lastDate.getDate() - (sortedDates.length - 1 - i));
+      expectedDate.setDate(lastDate.getDate() - (validDates.length - 1 - i));
       
       if (currentDate.toISOString().split('T')[0] === expectedDate.toISOString().split('T')[0]) {
         streak++;
@@ -54,6 +64,12 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
 
   const todayNote = habit.notes?.find(note => note.date === todayStr);
   const streak = calculateStreak();
+
+  // Filter completed dates for total count
+  const startDate = new Date();
+  const validCompletedDates = habit.completedDates.filter(date => 
+    new Date(date + 'T00:00:00Z') >= startDate
+  );
 
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 
@@ -91,7 +107,7 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
             <div className="flex items-center gap-2 text-blue-400">
               <Calendar size={18} />
               <span className="text-sm font-medium">
-                {habit.completedDates.length} total days
+                {validCompletedDates.length} total days
               </span>
             </div>
             <button

@@ -2,8 +2,9 @@ import React from 'react';
 import { Calendar, Flag, Clock, Target } from 'lucide-react';
 
 export function ChallengeDates() {
-  const startDate = new Date('2024-12-07');
-  const endDate = new Date('2025-03-06'); // 90 days after start date
+  const startDate = new Date();
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 74); // 75 days after start date
   const today = new Date();
   
   const formatDate = (date: Date) => {
@@ -16,7 +17,7 @@ export function ChallengeDates() {
   };
 
   const calculateProgress = () => {
-    const totalDays = 90;
+    const totalDays = 75;
     const daysPassed = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     return Math.min(Math.max(0, daysPassed), totalDays);
   };
@@ -24,7 +25,7 @@ export function ChallengeDates() {
   const getDayOfChallenge = () => {
     const daysPassed = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     if (daysPassed < 0) return 'Not started';
-    if (daysPassed > 90) return 'Completed';
+    if (daysPassed > 75) return 'Completed';
     return `Day ${daysPassed + 1}`;
   };
 

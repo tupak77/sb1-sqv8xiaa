@@ -1,12 +1,12 @@
 import React from 'react';
 import { Target } from 'lucide-react';
 import { AddGoalForm } from '../components/AddGoalForm';
-import { GoalDashboard } from '../components/GoalDashboard';
+import { GoalCard } from '../components/GoalCard';
 import { useGoals } from '../hooks/useGoals';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { DashboardLayout } from '../components/DashboardLayout';
 import { ErrorMessage } from '../components/ErrorMessage';
-import type { Goal, PriorityLevel } from '../types';
+import { Particles } from '../components/ui/particles';
 
 export function GoalsPage() {
   const {
@@ -21,6 +21,14 @@ export function GoalsPage() {
 
   return (
     <DashboardLayout>
+      <div className="relative">
+        <Particles
+          className="absolute inset-0 -z-10"
+          quantity={100}
+          ease={80}
+          color="#3b82f6"
+          refresh={false}
+        />
         <header className="text-center mb-12">
           <div className="flex items-center justify-center gap-4 mb-4">
             <Target size={40} className="text-blue-400" />
@@ -41,13 +49,31 @@ export function GoalsPage() {
         ) : (
           <>
             <AddGoalForm onAdd={handleAddGoal} />
-
-            <GoalDashboard
-              goals={goals}
-              onUpdateGoal={handleUpdateGoal}
-            />
+            
+            <div className="grid grid-cols-1 gap-4">
+              {goals
+                .sort((a, b) => {
+                  // Sort by completion status first
+                  if (a.completed !== b.completed) {
+                    return a.completed ? 1 : -1;
+                  }
+                  // Then by priority
+                  const priorityOrder = { high: 0, medium: 1, low: 2 };
+                  return priorityOrder[a.priority] - priorityOrder[b.priority];
+                })
+                .map(goal => (
+                  <GoalCard
+                    key={goal.id}
+                    goal={goal}
+                    onUpdate={handleUpdateGoal}
+                    onDelete={handleDeleteGoal}
+                  />
+                ))
+              }
+            </div>
           </>
         )}
+      </div>
     </DashboardLayout>
   );
 }
