@@ -1,9 +1,10 @@
 {
-  "name": "Mi web app",
-  "short_name": "App",
+  "name": "PRIME 2025",
+  "short_name": "PRIME",
+  "description": "Track your goals, habits and budget for 2025",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#1f2937",
   "theme_color": "#000000",
   "icons": [
     {
