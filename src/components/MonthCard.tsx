@@ -24,35 +24,43 @@ export function MonthCard({ month, onUpdateMonth, onRemoveTrip }: MonthCardProps
   const handleClubValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0;
     const templateValue = month.templateValue || 0;
-    const additionalValue = value + templateValue;
     onUpdateMonth(month.name, { 
       clubValue: value,
-      templateValue: templateValue,
       clubMultiplier: month.clubMultiplier || 25,
-      additionalValue: additionalValue
+      templateValue: templateValue,
+      templateMultiplier: month.templateMultiplier || 25
     });
   };
 
   const handleTemplateValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0;
     const clubValue = month.clubValue || 0;
-    const additionalValue = clubValue + value;
     onUpdateMonth(month.name, { 
       clubValue: clubValue,
-      templateValue: value,
-      templateMultiplier: month.templateMultiplier || 25,
-      additionalValue: additionalValue
+      clubMultiplier: month.clubMultiplier || 25,
+      templateValue: value, 
+      templateMultiplier: month.templateMultiplier || 25
     });
   };
 
   const handleClubMultiplierChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value === '' ? '' : parseInt(e.target.value) || 25;
-    onUpdateMonth(month.name, { clubMultiplier: value });
+    onUpdateMonth(month.name, {
+      clubValue: month.clubValue || 0,
+      clubMultiplier: value,
+      templateValue: month.templateValue || 0,
+      templateMultiplier: month.templateMultiplier || 25
+    });
   };
 
   const handleTemplateMultiplierChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value === '' ? '' : parseInt(e.target.value) || 25;
-    onUpdateMonth(month.name, { templateMultiplier: value });
+    onUpdateMonth(month.name, {
+      clubValue: month.clubValue || 0,
+      clubMultiplier: month.clubMultiplier || 25,
+      templateValue: month.templateValue || 0,
+      templateMultiplier: value
+    });
   };
 
   const handleAddTrip = (e: React.FormEvent) => {
