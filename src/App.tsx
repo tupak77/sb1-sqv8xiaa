@@ -5,6 +5,7 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { GoalsPage } from './pages/GoalsPage';
+import { RichMapPage } from './pages/RichMapPage';
 import { SubscriptionsPage } from './pages/SubscriptionsPage';
 import { HabitsPage } from './pages/HabitsPage';
 import { Dashboard } from './pages/Dashboard';
@@ -20,6 +21,11 @@ function App() {
           <Route path="/goals" element={
             <ProtectedRoute>
               <GoalsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/richmap" element={
+            <ProtectedRoute>
+              <RichMapPage />
             </ProtectedRoute>
           } />
           <Route path="/subscriptions" element={

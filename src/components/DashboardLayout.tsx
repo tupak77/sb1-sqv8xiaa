@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { LogOut, Target, Calendar, Receipt, Dumbbell } from 'lucide-react';
+import { LogOut, Target, Calendar, Receipt, Dumbbell, Wallet } from 'lucide-react';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -37,6 +37,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             >
               <Calendar size={20} />
               <span>Budget</span>
+            </Link>
+            <Link
+              to="/richmap"
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300
+                       ${location.pathname.includes('/richmap')
+                         ? 'bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 text-white' 
+                         : 'bg-gray-800/50 text-gray-400 hover:text-white'}`}
+            >
+              <Wallet size={20} />
+              <span>RichMap</span>
             </Link>
             <Link
               to="/goals"
