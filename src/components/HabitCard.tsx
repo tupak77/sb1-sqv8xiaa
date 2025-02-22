@@ -18,6 +18,7 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
   const today = new Date();
   const todayStr = toUTCDateString(today);
   const isCompletedToday = habit.completedDates.includes(todayStr);
+  const startDate = new Date('2025-02-22');
   const [showAnimation, setShowAnimation] = useState<'confetti' | 'checkmark' | null>(null);
   const [showNoteForm, setShowNoteForm] = useState(false);
 
@@ -36,40 +37,44 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
   const calculateStreak = () => {
     let streak = 0;
     const sortedDates = [...habit.completedDates].sort();
-    const today = new Date();
-    const startDate = new Date();
+    const today = new Date('2025-02-22');
     
-    // Filter dates to only include those after challenge start
-    const validDates = sortedDates.filter(date => 
-      new Date(date + 'T00:00:00Z') >= startDate
-    );
-    
-    if (validDates.length === 0) return 0;
+    if (sortedDates.length === 0) return 0;
     
     const lastDate = new Date(sortedDates[sortedDates.length - 1] + 'T00:00:00Z');
+    let currentDate = new Date(lastDate);
     
-    for (let i = validDates.length - 1; i >= 0; i--) {
-      const currentDate = new Date(validDates[i] + 'T00:00:00Z');
-      const expectedDate = new Date(lastDate);
-      expectedDate.setDate(lastDate.getDate() - (validDates.length - 1 - i));
+    // If the last completion wasn't today or yesterday, streak is 0
+    if (sortedDates[sortedDates.length - 1] < today.toISOString().split('T')[0]) {
+      const diffTime = Math.abs(today.getTime() - lastDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays > 1) return 0;
+    }
+    
+    for (let i = sortedDates.length - 1; i >= 0; i--) {
+      const date = new Date(sortedDates[i] + 'T00:00:00Z');
+      const diffTime = Math.abs(currentDate.getTime() - date.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       
-      if (currentDate.toISOString().split('T')[0] === expectedDate.toISOString().split('T')[0]) {
+      if (diffDays <= 1) {
         streak++;
+        currentDate = date;
       } else {
         break;
       }
     }
+    
     return streak;
   };
 
   const todayNote = habit.notes?.find(note => note.date === todayStr);
   const streak = calculateStreak();
 
-  // Filter completed dates for total count
-  const startDate = new Date();
-  const validCompletedDates = habit.completedDates.filter(date => 
-    new Date(date + 'T00:00:00Z') >= startDate
-  );
+  const totalDays = habit.completedDates.filter(date => 
+    new Date(date) >= startDate
+  ).length;
+
+  const progress = (streak / 21) * 100;
 
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 
@@ -102,12 +107,12 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
           <div className="mt-4 flex items-center gap-4">
             <div className="flex items-center gap-2 text-yellow-400">
               <Trophy size={18} />
-              <span className="text-sm font-medium">{streak} day streak</span>
+              <span className="text-sm font-medium">{streak}/21 day streak</span>
             </div>
             <div className="flex items-center gap-2 text-blue-400">
               <Calendar size={18} />
               <span className="text-sm font-medium">
-                {validCompletedDates.length} total days
+                {totalDays} total days
               </span>
             </div>
             <button
@@ -139,7 +144,7 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
       <div className="mt-4 h-2 bg-gray-700/50 rounded-full overflow-hidden">
         <div
           className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
-          style={{ width: `${(habit.completedDates.length / 90) * 100}%` }}
+          style={{ width: `${progress}%` }}
         />
       </div>
       

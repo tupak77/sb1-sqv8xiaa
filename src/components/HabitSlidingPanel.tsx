@@ -2,6 +2,7 @@ import React from 'react';
 import { X, Calendar } from 'lucide-react';
 import type { Habit } from '../types';
 import { HabitHistoryEditor } from './HabitHistoryEditor';
+import { calculateBestStreak } from '../utils/streaks';
 
 interface HabitSlidingPanelProps {
   habit: Habit | null;
@@ -20,8 +21,10 @@ export function HabitSlidingPanel({
 }: HabitSlidingPanelProps) {
   if (!habit) return null;
 
+  const startDate = new Date('2025-02-22');
   const totalDays = habit.completedDates.length;
   const currentStreak = calculateStreak(habit.completedDates);
+  const bestStreak = calculateBestStreak(habit.completedDates, startDate);
 
   return (
     <>
@@ -50,6 +53,10 @@ export function HabitSlidingPanel({
           {habit.description && (
             <p className="mt-2 text-gray-400">{habit.description}</p>
           )}
+          <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700/50">
+            <div className="text-sm text-gray-400 mb-1">Best Streak</div>
+            <div className="text-2xl font-bold text-yellow-400">{bestStreak} days</div>
+          </div>
         </div>
 
         <div className="p-6 space-y-8">

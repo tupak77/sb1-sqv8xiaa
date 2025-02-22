@@ -82,11 +82,11 @@ export function HabitsPage() {
             <Target size={40} className="text-blue-400" />
             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 
                          bg-clip-text text-transparent gradient-animate">
-              75 Day Challenge
+              100 Day Challenge
             </h1>
           </div>
           <p className="text-xl text-gray-400 font-medium tracking-wide mb-8">
-            Transform your life through consistent daily actions
+            Transform your life through 100 days of consistent action
           </p>
         </header>
 

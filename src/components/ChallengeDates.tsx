@@ -2,9 +2,8 @@ import React from 'react';
 import { Calendar, Flag, Clock, Target } from 'lucide-react';
 
 export function ChallengeDates() {
-  const startDate = new Date();
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + 74); // 75 days after start date
+  const startDate = new Date('2025-02-22');
+  const endDate = new Date('2025-06-01');
   const today = new Date();
   
   const formatDate = (date: Date) => {
@@ -17,16 +16,16 @@ export function ChallengeDates() {
   };
 
   const calculateProgress = () => {
-    const totalDays = 75;
+    const totalDays = 100;
     const daysPassed = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    return Math.min(Math.max(0, daysPassed), totalDays);
+    return Math.min(Math.max(1, daysPassed + 1), totalDays);
   };
 
   const getDayOfChallenge = () => {
     const daysPassed = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    if (daysPassed < 0) return 'Not started';
-    if (daysPassed > 75) return 'Completed';
-    return `Day ${daysPassed + 1}`;
+    const day = Math.min(Math.max(1, daysPassed + 1), 100);
+    if (day > 100) return 'Completed';
+    return `Day ${day}`;
   };
 
   return (
@@ -85,13 +84,13 @@ export function ChallengeDates() {
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Challenge Progress</span>
-              <span className="text-gray-400">{calculateProgress()}/90 days</span>
+              <span className="text-gray-400">{calculateProgress()}/100 days</span>
             </div>
             <div className="h-4 bg-gray-700/50 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 
                          transition-all duration-300"
-                style={{ width: `${(calculateProgress() / 90) * 100}%` }}
+                style={{ width: `${(calculateProgress() / 100) * 100}%` }}
               />
             </div>
           </div>
