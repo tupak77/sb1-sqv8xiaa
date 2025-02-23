@@ -21,7 +21,7 @@ export function HabitSlidingPanel({
 }: HabitSlidingPanelProps) {
   if (!habit) return null;
 
-  const startDate = new Date('2025-02-22');
+  const startDate = new Date('2025-02-23');
   const totalDays = habit.completedDates.length;
   const currentStreak = calculateStreak(habit.completedDates);
   const bestStreak = calculateBestStreak(habit.completedDates, startDate);

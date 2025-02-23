@@ -12,8 +12,8 @@ export function WeeklyReview({ habits }: WeeklyReviewProps) {
   const weeklyData = useMemo(() => {
     const weeks = [];
     
-    // Set start date to January 20th
-    const startDate = new Date('2024-01-20');
+    // Set start date to February 23rd, 2025
+    const startDate = new Date('2025-02-23');
     
     for (let i = 0; i < 4; i++) {
       const weekStart = new Date(startDate);

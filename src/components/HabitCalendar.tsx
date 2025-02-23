@@ -19,7 +19,6 @@ export function HabitCalendar({ habits }: HabitCalendarProps) {
   };
 
   const getDayStatus = (date: string) => {
-    // Ensure we're comparing dates in UTC
     const utcDate = new Date(date + 'T00:00:00Z').toISOString().split('T')[0];
     const habitOrder = [
       'Rezar',
@@ -29,6 +28,11 @@ export function HabitCalendar({ habits }: HabitCalendarProps) {
       'Mezquita',
       'Leer'
     ];
+    
+    // Only show status for dates from Feb 23, 2025 onwards
+    if (new Date(utcDate) < new Date('2025-02-23')) {
+      return habitOrder.map(() => '·');
+    }
 
     const orderedHabits = [...habits].sort((a, b) => {
       const aIndex = habitOrder.indexOf(a.title);
