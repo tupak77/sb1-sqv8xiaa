@@ -29,8 +29,8 @@ export function HabitCalendar({ habits }: HabitCalendarProps) {
       'Leer'
     ];
     
-    // Only show status for dates from Feb 23, 2025 onwards
-    if (new Date(utcDate) < new Date('2025-02-23')) {
+    // Only show status for dates from March 1, 2025 onwards
+    if (new Date(utcDate) < new Date('2025-03-01')) {
       return habitOrder.map(() => '·');
     }
 

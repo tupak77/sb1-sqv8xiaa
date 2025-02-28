@@ -18,7 +18,7 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
   const today = new Date();
   const todayStr = toUTCDateString(today);
   const isCompletedToday = habit.completedDates.includes(todayStr);
-  const startDate = new Date('2025-02-22');
+  const startDate = new Date('2025-03-01');
   const [showAnimation, setShowAnimation] = useState<'confetti' | 'checkmark' | null>(null);
   const [showNoteForm, setShowNoteForm] = useState(false);
 
@@ -37,7 +37,7 @@ export function HabitCard({ habit, onToggle, onUpdateNotes, onClick, onDelete }:
   const calculateStreak = () => {
     let streak = 0;
     const sortedDates = [...habit.completedDates].sort();
-    const today = new Date('2025-02-22');
+    const today = new Date('2025-03-01');
     
     if (sortedDates.length === 0) return 0;
     
